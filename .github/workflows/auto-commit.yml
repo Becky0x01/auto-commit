@@ -2,12 +2,13 @@ name: Daily GitHub Activity
 
 on:
   schedule:
-    - cron: '0 1 * * *'
-  workflow_dispatch:
+    - cron: '0 1 * * *'  # Runs every day at 1 AM UTC
+  workflow_dispatch:      # Optional manual trigger
 
 jobs:
   daily-commit:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -17,12 +18,11 @@ jobs:
           echo "✅ Daily ping: $(date)" >> activity_log.txt
 
       - name: Commit and push changes
-  env:
-    TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  run: |
-    git config --global user.name "Becky0x01"
-    git config --global user.email "your-email@example.com"
-    git add .
-    git commit -m "📅 Daily ping: $(date)" || echo "No changes to commit"
-    git push https://x-access-token:${TOKEN}@github.com/${{ github.repository }}.git HEAD:main
-
+        env:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config --global user.name "Becky0x01"
+          git config --global user.email "your-email@example.com"
+          git add .
+          git commit -m "📅 Daily ping: $(date)" || echo "No changes to commit"
+          git push https://x-access-token:${TOKEN}@github.com/${{ github.repository }}.git HEAD:main
